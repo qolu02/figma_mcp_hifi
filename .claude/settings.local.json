@@ -21,7 +21,13 @@
       "mcp__chrome-devtools__resize_page",
       "Bash(npm install:*)",
       "mcp__chrome-devtools__list_network_requests",
-      "mcp__chrome-devtools__list_console_messages"
+      "mcp__chrome-devtools__list_console_messages",
+      "mcp__chrome-devtools__get_network_request",
+      "Bash(cat:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(gh run:*)",
+      "Bash(git push:*)"
     ]
   }
 }
