@@ -850,3 +850,362 @@ src/routes/homepage/
 ✅ Barrel exports - clean icon imports via index.ts
 
 ---
+
+## Responsive Version Implementation (Session: 2025-12-31)
+
+> **Status**: ✅ **COMPLETED**
+> **Route**: `/homepage-responsive`
+> **Implementation**: Complete responsive refactor using conventional CSS Grid/Flexbox
+
+### Overview
+
+Created a fully responsive version of the homepage alongside the original pixel-perfect version. Both versions coexist in the codebase with a landing page for navigation.
+
+### Key Differences: Original vs Responsive
+
+| Aspect | Original (`/homepage`) | Responsive (`/homepage-responsive`) |
+|--------|----------------------|-----------------------------------|
+| **Layout** | Absolute positioning | Flexbox & CSS Grid |
+| **Units** | Fixed pixels | rem, %, clamp(), vw |
+| **Design goal** | Pixel-perfect Figma match (1440x1024) | Adaptive across all screen sizes |
+| **Grid** | Fixed 3-column | Auto-fit grid (1-3 columns) |
+| **Spacing** | Fixed pixel values | Fluid with clamp() |
+
+### Route Structure
+
+```
+src/routes/homepage_responsive/
+├── index.tsx                          # Main route entry with layout structure
+├── atoms/
+│   ├── icons/                         # Shared icon components
+│   │   └── [same icons as homepage]
+│   └── IconBadge.tsx                  # Icon container component
+├── molecules/
+│   ├── ClientListCard.tsx             # Responsive card with flex layout
+│   ├── FilterChip.tsx                 # Filter pill button
+│   └── SearchBar.tsx                  # Search input component
+└── organisms/
+    ├── TopNavigation.tsx              # Full-width navigation
+    ├── HeroSection.tsx                # Welcome section
+    ├── SearchSection.tsx              # Search + pills container
+    ├── ClientListsGrid.tsx            # Responsive grid
+    └── Footer.tsx                     # Footer component
+```
+
+### Responsive Layout Architecture
+
+**Main Container Structure** (`src/routes/homepage_responsive/index.tsx`):
+
+```tsx
+<div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+  {/* Navigation - Full width at window edges */}
+  <div style={{ width: '100%', padding: '1.375rem 1rem' }}>
+    <TopNavigation />
+  </div>
+
+  {/* Main content - Centered with max-width */}
+  <div style={{
+    width: '100%',
+    maxWidth: '1440px',
+    padding: '0 2rem',
+    flex: 1  // Pushes footer to bottom
+  }}>
+    <HeroSection />
+    <SearchSection />
+    <ClientListsGrid />
+  </div>
+
+  {/* Footer - Sticky to bottom */}
+  <div style={{ width: '100%', maxWidth: '1440px', padding: '0 2rem' }}>
+    <Footer />
+  </div>
+</div>
+```
+
+**Key Layout Patterns:**
+
+1. **Navigation at window edges** (TopNavigation.tsx:17-24):
+   - Parent container: `width: '100%'` with `1rem` padding
+   - Nav element: `width: '100%'` with space-between
+   - Hamburger and buttons sit at screen corners
+
+2. **Centered content containers**:
+   - Max width: `1440px`
+   - Horizontal centering: `margin: '0 auto'`
+   - Responsive padding: `2rem` sides
+
+3. **Search section centering** (SearchSection.tsx:21-29):
+   - Container: `maxWidth: '852px'`, `margin: '0 auto'`
+   - Pills align left with search bar start
+
+4. **Responsive card grid** (ClientListsGrid.tsx:96-102):
+   ```tsx
+   gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))'
+   ```
+   - Minimum card width: 320px
+   - Auto-fill: Creates as many columns as fit
+   - Cards expand to fill available space
+   - Result: 1-3 columns depending on viewport width
+
+5. **Sticky footer** (index.tsx:60, 72-83):
+   - Main content: `flex: 1` to fill vertical space
+   - Footer in separate container outside flex:1 element
+   - Sticks to bottom when content is short
+
+### Responsive Spacing with clamp()
+
+Fluid spacing that scales with viewport size:
+
+```tsx
+// Hero section top margin
+marginTop: 'clamp(2rem, 6vw, 4.5rem)'  // 32px to 72px
+
+// Search section margins
+marginTop: 'clamp(2rem, 5vw, 4rem)'     // 32px to 64px
+marginBottom: 'clamp(2rem, 6vw, 4rem)'  // 32px to 64px
+```
+
+**clamp() syntax**: `clamp(min, preferred, max)`
+- Smaller screens get minimum spacing
+- Larger screens scale up proportionally
+- Caps at maximum value
+
+### Component-Specific Responsive Patterns
+
+**ClientListCard** (molecules/ClientListCard.tsx:77):
+- Added `marginTop: '1.5rem'` to footer section
+- Prevents cramped text when descriptions wrap to 2+ lines
+
+**SearchSection** (organisms/SearchSection.tsx:21-49):
+- Search bar centered with max-width container
+- Filter pills left-aligned under search bar
+- Both share same max-width for alignment
+
+**ClientListsGrid** (organisms/ClientListsGrid.tsx:96-107):
+- Auto-fill grid: adapts column count to viewport
+- Gap: `1.25rem` for breathing room
+- Cards use full width of grid cells
+
+### Landing Page & Routing
+
+**App.tsx - Client-side routing**:
+```tsx
+function App() {
+  const [route, setRoute] = useState(window.location.pathname)
+
+  switch (route) {
+    case '/homepage': return <Homepage />
+    case '/homepage-responsive': return <HomepageResponsive />
+    case '/': return <LandingPage />
+    default: return <HomepageResponsive />
+  }
+}
+```
+
+**Landing page** (`/`):
+- Two navigation buttons:
+  - "Original (Pixel-Perfect)" → `/homepage`
+  - "Responsive Version" → `/homepage-responsive`
+- Explains difference between implementations
+
+### Layout Fixes & Refinements
+
+**Session fixes applied**:
+
+1. **Card footer spacing** (ClientListCard.tsx:77):
+   - Issue: Wrapped descriptions looked cramped
+   - Fix: Added `marginTop: '1.5rem'` to footer div
+
+2. **Pills alignment** (SearchSection.tsx:34-42):
+   - Initial: Right-justified to window edge
+   - Revised: Left-justified to match search bar start
+   - Solution: Pills in same centered container as search bar
+
+3. **Navigation to window edges** (index.tsx:38-48):
+   - Issue: Navigation padded inside content container
+   - Fix: Moved nav to separate full-width container with minimal padding
+   - Result: Hamburger and buttons at screen corners
+
+4. **Card grid expansion** (ClientListsGrid.tsx:99):
+   - Changed: `auto-fit` → `auto-fill`
+   - Removed: `maxWidth: '1050px'` constraint
+   - Result: Cards expand to fill available horizontal space
+
+5. **Footer sticky to bottom** (index.tsx:60, 72-83):
+   - Added: `flex: 1` to main content container
+   - Moved: Footer to separate container
+   - Result: Footer always at bottom of viewport
+
+### Responsive Breakpoints
+
+**Implicit breakpoints** (via CSS Grid auto-fill):
+- **Mobile** (<640px): 1 column (320px min card width)
+- **Tablet** (640-960px): 2 columns
+- **Desktop** (>960px): 3 columns
+
+**Explicit breakpoints** (via clamp()):
+- Spacing scales smoothly from 2rem to 4.5rem based on viewport
+
+### Testing Considerations
+
+**To verify responsive layout:**
+1. Test at 375px width (mobile)
+2. Test at 768px width (tablet)
+3. Test at 1440px width (desktop)
+4. Test card text wrapping (long descriptions)
+5. Verify navigation buttons at screen edges
+6. Check footer sticks to bottom with short content
+7. Verify search bar and pills alignment
+
+---
+
+## Project Configuration
+
+### .gitignore Setup
+
+**Location**: `.gitignore` (root)
+
+**Key exclusions**:
+
+```gitignore
+# Dependencies
+node_modules/
+yarn.lock
+pnpm-lock.yaml
+# package-lock.json is NOT ignored (needed for CI)
+
+# Build outputs
+dist/
+dist-ssr/
+build/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Windows reserved filenames (CRITICAL for Windows compatibility)
+CON
+PRN
+AUX
+NUL
+COM1-COM9
+LPT1-LPT9
+```
+
+**Windows reserved filenames** (lines 46-68):
+- **Issue**: Files named "nul", "con", "prn", etc. cause `git add` failures on Windows
+- **Error**: `error: nul: failed to insert into database`
+- **Solution**: Add all Windows device names to .gitignore
+- **Prevention**: These names are system-reserved and cannot be used as filenames
+
+**package-lock.json handling**:
+- **Kept in repository** (NOT ignored) for reproducible CI builds
+- **Reason**: GitHub Actions needs lock file for `npm ci` command
+- **Note**: Comment in .gitignore explains this decision
+
+### GitHub Pages Deployment
+
+**Status**: ✅ Fully configured for automatic deployment
+
+**Configuration files**:
+
+1. **`.github/workflows/deploy.yml`** - GitHub Actions workflow:
+   ```yaml
+   on:
+     push:
+       branches: [main]
+
+   jobs:
+     build:
+       - Checkout code
+       - Setup Node.js 20
+       - npm ci (install from lock file)
+       - npm run build
+       - Upload dist/ artifact
+
+     deploy:
+       - Deploy artifact to GitHub Pages
+   ```
+
+2. **`vite.config.ts`** (line 11) - Base path configuration:
+   ```typescript
+   export default defineConfig({
+     plugins: [react(), tailwindcss()],
+     base: '/homepage_demo/',  // GitHub Pages repo path
+   })
+   ```
+
+3. **`public/404.html`** - SPA routing fallback:
+   - GitHub Pages shows this for non-existent routes
+   - Script converts path to query string and redirects
+   - Preserves client-side routes (`/homepage`, `/homepage-responsive`)
+
+4. **`index.html`** (lines 8-27) - Route restoration script:
+   - Reads query string from 404 redirect
+   - Restores original route using `window.history.replaceState`
+   - User sees correct route in browser URL
+
+**How SPA routing works on GitHub Pages**:
+
+```
+User visits: https://username.github.io/homepage_demo/homepage
+                                                          ↓
+GitHub Pages: "Route not found" → Serves 404.html
+                                         ↓
+404.html script: Converts /homepage to query string
+                                         ↓
+Redirects to: https://username.github.io/homepage_demo/?/homepage
+                                         ↓
+index.html script: Reads ?/homepage, restores /homepage in history
+                                         ↓
+React Router: Handles /homepage, renders correct component
+```
+
+**Deployment steps**:
+
+1. **Push to GitHub**: `git push origin main`
+
+2. **Enable GitHub Pages** (one-time setup):
+   - Repository Settings → Pages
+   - Source: **GitHub Actions** (not "Deploy from branch")
+
+3. **Automatic deployment**:
+   - Workflow triggers on every push to `main`
+   - Builds project with `npm run build`
+   - Deploys to `https://[username].github.io/homepage_demo/`
+
+4. **Verify deployment**:
+   - Check Actions tab for workflow status
+   - Visit deployed URL
+   - Test all routes: `/`, `/homepage`, `/homepage-responsive`
+
+**Deployment troubleshooting**:
+
+| Error | Cause | Solution |
+|-------|-------|----------|
+| "Dependencies lock file not found" | package-lock.json in .gitignore | Remove from .gitignore, commit lock file |
+| "404 on navigation" | Missing 404.html or script | Verify both files exist and scripts present |
+| "Assets not loading" | Incorrect base path | Check `base` in vite.config.ts matches repo name |
+| "Blank page" | Build errors | Check Actions logs for build failures |
+
+### Windows Compatibility Notes
+
+**Reserved filenames** that MUST be avoided:
+- **Device names**: CON, PRN, AUX, NUL
+- **Serial ports**: COM1 through COM9
+- **Parallel ports**: LPT1 through LPT9
+
+**Git behavior on Windows**:
+- Cannot create files with these names
+- `git add` fails with "failed to insert into database"
+- Solution: Add all reserved names to .gitignore
+
+**Case encountered**: A file named "nul" was accidentally created, blocking git operations. Removed with `rm nul` and added to .gitignore.
+
+---
