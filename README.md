@@ -1,4 +1,28 @@
-# React + TypeScript + Vite
+# Homepage Demo
+
+A responsive React + TypeScript + Vite application featuring pixel-perfect Figma implementations and responsive layouts.
+
+## Deployment
+
+This project is configured for automatic deployment to GitHub Pages.
+
+### Setup GitHub Pages
+
+1. Push your code to GitHub
+2. Go to your repository Settings → Pages
+3. Under "Build and deployment":
+   - Source: Select "GitHub Actions"
+4. The workflow will automatically deploy on every push to `main`
+
+### How it works
+
+- **Automatic deployment**: GitHub Actions workflow (`.github/workflows/deploy.yml`) builds and deploys on push
+- **Client-side routing**: SPA routing is handled via `404.html` redirect script
+- **Base path**: Configured in `vite.config.ts` as `/homepage_demo/`
+
+Your site will be available at: `https://[your-username].github.io/homepage_demo/`
+
+## Development
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
