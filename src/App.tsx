@@ -10,6 +10,10 @@ function App() {
   const getRoute = () => {
     const path = window.location.pathname
     // Remove base path to get the route
+    // e.g., '/figma_mcp_hifi/' -> '/', '/figma_mcp_hifi/homepage' -> '/homepage'
+    if (path === base || path === base.replace(/\/$/, '')) {
+      return '/'
+    }
     return path.startsWith(base) ? path.slice(base.length - 1) : path
   }
 

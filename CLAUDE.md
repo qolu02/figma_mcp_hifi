@@ -1143,28 +1143,47 @@ LPT1-LPT9
 
 3. **`public/404.html`** - SPA routing fallback:
    - GitHub Pages shows this for non-existent routes
-   - Script converts path to query string and redirects
-   - Preserves client-side routes (`/homepage`, `/homepage-responsive`)
+   - Script extracts the route path and redirects to index.html with query parameter
+   - Example: `/homepage` → `/?/homepage`
+   - Preserves client-side routes (`/`, `/homepage`, `/homepage-responsive`)
 
 4. **`index.html`** (lines 8-27) - Route restoration script:
    - Reads query string from 404 redirect
    - Restores original route using `window.history.replaceState`
    - User sees correct route in browser URL
 
+5. **`src/App.tsx`** - Client-side routing:
+   - Route normalization: Removes base path from URL
+   - Three routes defined:
+     - `/` - Landing page with navigation links
+     - `/homepage` - Pixel-perfect implementation
+     - `/homepage-responsive` - Responsive implementation
+
+**Route structure**:
+
+```
+https://qolu02.github.io/figma_mcp_hifi/
+├── /                          → Landing page (navigation hub)
+├── /homepage                  → Original pixel-perfect version
+└── /homepage-responsive       → Responsive version
+```
+
 **How SPA routing works on GitHub Pages**:
 
 ```
-User visits: https://username.github.io/figma_mcp_hifi/homepage
+User visits: https://qolu02.github.io/figma_mcp_hifi/homepage
                                                           ↓
 GitHub Pages: "Route not found" → Serves 404.html
                                          ↓
-404.html script: Converts /homepage to query string
+404.html script: Extracts route path /homepage
                                          ↓
-Redirects to: https://username.github.io/figma_mcp_hifi/?/homepage
+Redirects to: https://qolu02.github.io/figma_mcp_hifi/?/homepage
                                          ↓
 index.html script: Reads ?/homepage, restores /homepage in history
                                          ↓
-React Router: Handles /homepage, renders correct component
+App.tsx getRoute(): Normalizes path → removes base → returns '/homepage'
+                                         ↓
+App.tsx routing: Matches '/homepage' case → Renders <Homepage />
 ```
 
 **Deployment steps**:
