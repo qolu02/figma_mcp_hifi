@@ -1,0 +1,91 @@
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Build outputs
+dist/
+dist-ssr/
+build/
+*.local
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.swp
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Windows reserved filenames
+CON
+PRN
+AUX
+NUL
+COM1
+COM2
+COM3
+COM4
+COM5
+COM6
+COM7
+COM8
+COM9
+LPT1
+LPT2
+LPT3
+LPT4
+LPT5
+LPT6
+LPT7
+LPT8
+LPT9
+
+# Testing
+coverage/
+*.lcov
+.nyc_output/
+
+# Temporary files
+*.tmp
+.cache/
+.parcel-cache/
+.temp/
+
+# TypeScript
+*.tsbuildinfo
+
+# Optional caches
+.eslintcache
+.stylelintcache
+
+# Misc
+.sass-cache/
+connect.lock
+typings/

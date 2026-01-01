@@ -1,0 +1,64 @@
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&display=swap');
+/* GT Walsheim alternative - Inter (geometric sans-serif, multiple weights) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
+@import "tailwindcss";
+
+/* Tailwind v4 CSS-based theme configuration */
+@theme {
+  --color-text-bright: #e6eaf0;
+  --color-text-subtle: #aeb4bc;
+  --color-text-muted: #7a828d;
+
+  --color-surface-level-1: #1a1e24;
+  --color-surface-level-2: #22272e;
+  --color-surface-level-3: #2e353d;
+  --color-surface-level-4: #3a424c;
+
+  --color-border-dark: #30353f;
+  --color-bg-primary: #1a1e24;
+
+  --font-family-noto-serif: "Noto Serif JP", serif;
+  --font-family-gt-walsheim: "Inter", "GT Walsheim Trial", system-ui, sans-serif;
+  --font-family-gt-walsheim-light: "Inter", "GT Walsheim", system-ui, sans-serif;
+  --font-family-jakarta: "Plus Jakarta Sans", sans-serif;
+  --font-family-ibm-mono: "IBM Plex Mono", monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', 'GT Walsheim Trial', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #1a1e24;
+  color: #e6eaf0;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* Reset button styles for Base UI compatibility */
+button {
+  background: none;
+  border: none;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+  box-sizing: border-box;
+}
+
+/* Search input placeholder styling - match Figma brightness */
+.search-input::placeholder {
+  color: #aeb4bc;
+  opacity: 1;
+}
