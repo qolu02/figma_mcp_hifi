@@ -18,9 +18,9 @@ This project is configured for automatic deployment to GitHub Pages.
 
 - **Automatic deployment**: GitHub Actions workflow (`.github/workflows/deploy.yml`) builds and deploys on push
 - **Client-side routing**: SPA routing is handled via `404.html` redirect script
-- **Base path**: Configured in `vite.config.ts` as `/homepage_demo/`
+- **Base path**: Configured in `vite.config.ts` as `/figma_mcp_hifi/`
 
-Your site will be available at: `https://[your-username].github.io/homepage_demo/`
+Your site will be available at: `https://[your-username].github.io/figma_mcp_hifi/`
 
 ## Development
 

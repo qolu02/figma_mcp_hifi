@@ -1137,7 +1137,7 @@ LPT1-LPT9
    ```typescript
    export default defineConfig({
      plugins: [react(), tailwindcss()],
-     base: '/homepage_demo/',  // GitHub Pages repo path
+     base: '/figma_mcp_hifi/',  // GitHub Pages repo path (MUST match repository name)
    })
    ```
 
@@ -1154,13 +1154,13 @@ LPT1-LPT9
 **How SPA routing works on GitHub Pages**:
 
 ```
-User visits: https://username.github.io/homepage_demo/homepage
+User visits: https://username.github.io/figma_mcp_hifi/homepage
                                                           ↓
 GitHub Pages: "Route not found" → Serves 404.html
                                          ↓
 404.html script: Converts /homepage to query string
                                          ↓
-Redirects to: https://username.github.io/homepage_demo/?/homepage
+Redirects to: https://username.github.io/figma_mcp_hifi/?/homepage
                                          ↓
 index.html script: Reads ?/homepage, restores /homepage in history
                                          ↓
@@ -1178,7 +1178,7 @@ React Router: Handles /homepage, renders correct component
 3. **Automatic deployment**:
    - Workflow triggers on every push to `main`
    - Builds project with `npm run build`
-   - Deploys to `https://[username].github.io/homepage_demo/`
+   - Deploys to `https://[username].github.io/figma_mcp_hifi/`
 
 4. **Verify deployment**:
    - Check Actions tab for workflow status

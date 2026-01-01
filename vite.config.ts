@@ -8,5 +8,5 @@ export default defineConfig({
     react(),
     tailwindcss()
   ],
-  base: '/homepage_demo/',
+  base: '/figma_mcp_hifi/',
 })
